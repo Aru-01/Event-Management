@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+    <link href="{% static 'css/output.css' %}" rel="stylesheet" />
+  </head>
+  <body class="bg-gray-100">
+    <div class="">{% include "../shared/nav.html" %}</div>
+    <!-- dashboard.html -->
+    <div
+      class="h-[50vh] bg-gradient-to-br from-indigo-100 via-white to-purple-100 py-16 px-6 text-center"
+    >
+      <h1 class="text-3xl font-bold text-gray-800 mb-6">
+        🎉 Welcome to Event Manager
+      </h1>
+      <p class="text-gray-600 mb-10">
+        Manage and create your events with ease.
+      </p>
+
+      <a
+        href="{% url 'create_event' %}"
+        class="inline-block bg-indigo-600 text-white text-lg px-6 py-3 rounded-full shadow-md hover:bg-indigo-700 transition"
+      >
+        ➕ Create New Event
+      </a>
+    </div>
+
+    <div class="">{% include "../shared/footer.html" %}</div>
+
+    {% comment %} nav toogle er jonno {% endcomment %}
+    <script>
+      document.getElementById("menuBtn").addEventListener("click", function () {
+        const menu = document.getElementById("mobileMenu");
+        menu.classList.toggle("hidden");
+      });
+    </script>
+  </body>
+</html>

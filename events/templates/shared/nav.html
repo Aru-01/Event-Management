@@ -1,4 +1,3 @@
-
 <nav class="bg-white shadow-md">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between items-center h-16">
@@ -12,17 +11,23 @@
 
       <!-- Desktop Menu -->
       <div class="hidden md:flex items-center space-x-6">
-        <a href="#" class="text-gray-700 hover:text-indigo-600 font-medium"
+        <a
+          href="{% url 'home' %}"
+          class="text-gray-700 hover:text-indigo-600 font-medium"
           >Home</a
         >
-        <a href="#" class="text-gray-700 hover:text-indigo-600 font-medium"
+        <a
+          href="{% url 'events' %}"
+          class="text-gray-700 hover:text-indigo-600 font-medium"
           >Events</a
         >
-        <a href="#" class="text-gray-700 hover:text-indigo-600 font-medium"
+        <a
+          href="{% url 'contact-us' %}"
+          class="text-gray-700 hover:text-indigo-600 font-medium"
           >Contact Us</a
         >
         <a
-          href="#"
+          href="{% url 'dashborad' %}"
           class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"
           >Dashboard</a
         >

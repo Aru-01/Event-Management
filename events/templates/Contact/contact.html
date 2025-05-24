@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+    <link href="{% static 'css/output.css' %}" rel="stylesheet" />
+  </head>
+  <body class="bg-gray-100">
+    <div class="">{% include "../shared/nav.html" %}</div>
+    <div class="">{% include "../shared/footer.html" %}</div>
+
+    {% comment %} nav toogle er jonno {% endcomment %}
+    <script>
+      document.getElementById("menuBtn").addEventListener("click", function () {
+        const menu = document.getElementById("mobileMenu");
+        menu.classList.toggle("hidden");
+      });
+    </script>
+  </body>
+</html>
