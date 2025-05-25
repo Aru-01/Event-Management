@@ -1,0 +1,62 @@
+<div class="shadow-lg rounded-xl p-8 w-full max-w-2xl">
+  <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">
+    Create Event Form
+  </h2>
+
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="space-y-4">
+      <div class="space-y-2">
+        Event {{ form.name.label_tag }} {{ form.name }}
+      </div>
+
+      <div class="space-y-2">
+        Event {{ form.description.label_tag }} {{ form.description }}
+      </div>
+
+      <div class="space-y-2">Image {{ form.img }}</div>
+
+      <div class="space-y-2">
+        Event {{ form.location.label_tag }} {{ form.location }}
+      </div>
+
+      <div class="space-y-2">{{ form.date.label_tag }} {{ form.date }}</div>
+
+      <div class="space-y-2">{{ form.time.label_tag }} {{ form.time }}</div>
+
+      <div>
+        <div class="flex items-center justify-between">
+          {{ form.category.label_tag }}
+          <a
+            href="{% url 'add_category' %}"
+            class="text-blue-600 text-sm hover:underline"
+          >
+            + Add Category
+          </a>
+        </div>
+        {{ form.category }}
+      </div>
+
+      <div>
+        <div class="flex items-center justify-between">
+          {{ form.participants.label_tag }}
+          <a
+            href="{% url 'add_participant' %}"
+            class="text-blue-600 text-sm hover:underline"
+          >
+            + Add Participant
+          </a>
+        </div>
+        {{ form.participants }}
+      </div>
+    </div>
+
+    <button
+      type="submit"
+      class="w-full mt-8 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
+    >
+      Submit Event
+    </button>
+  </form>
+</div>

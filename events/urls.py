@@ -2,7 +2,7 @@ from django.urls import path
 from events.views import (
     events,
     contact,
-    dashborad,
+    dashboard,
     create_event,
     add_category,
     add_participant,
@@ -11,7 +11,7 @@ from events.views import (
 urlpatterns = [
     path("events/", events, name="events"),
     path("contact-us/", contact, name="contact-us"),
-    path("dashborad/", dashborad, name="dashborad"),
+    path("dashboard/", dashboard, name="dashboard"),
     path("create-event/", create_event, name="create_event"),
     path("add-category/", add_category, name="add_category"),
     path("add-participant/", add_participant, name="add_participant"),

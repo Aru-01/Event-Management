@@ -27,7 +27,7 @@
           >Contact Us</a
         >
         <a
-          href="{% url 'dashborad' %}"
+          href="{% url 'dashboard' %}"
           class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"
           >Dashboard</a
         >
@@ -56,11 +56,21 @@
 
   <!-- Mobile Menu -->
   <div id="mobileMenu" class="md:hidden hidden px-4 pt-2 pb-4 space-y-2">
-    <a href="#" class="block text-gray-700 hover:text-indigo-600">Home</a>
-    <a href="#" class="block text-gray-700 hover:text-indigo-600">Events</a>
-    <a href="#" class="block text-gray-700 hover:text-indigo-600">Contact Us</a>
+    <a href="{% url 'home' %}" class="block text-gray-700 hover:text-indigo-600"
+      >Home</a
+    >
     <a
-      href="#"
+      href="{% url 'events' %}"
+      class="block text-gray-700 hover:text-indigo-600"
+      >Events</a
+    >
+    <a
+      href="{% url 'contact-us' %}"
+      class="block text-gray-700 hover:text-indigo-600"
+      >Contact Us</a
+    >
+    <a
+      href="{% url 'dashboard' %}"
       class="block bg-indigo-600 text-white px-3 py-2 rounded hover:bg-indigo-700"
       >Dashboard</a
     >

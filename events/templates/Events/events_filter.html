@@ -1,0 +1,64 @@
+  <form method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+          <input
+            type="text"
+            name="search"
+            placeholder="Search by name..."
+            value="{{ request.GET.search }}"
+            class="px-4 py-2 border border-gray-300 rounded-lg"
+          />
+
+          <select
+            name="category"
+            class="px-4 py-2 border border-gray-300 rounded-lg"
+          >
+            <option value="">All Categories</option>
+            {% for cat in categories %}
+              <option value="{{ cat }}" {% if request.GET.category == cat %}selected{% endif %}>
+                {{ cat }}
+              </option>
+            {% endfor %}
+          </select>
+
+        <input  class="px-4 py-2 border border-gray-300 rounded-lg" type="date" name="date_from" value="{{ date_from }}" />
+        <input  class="px-4 py-2 border border-gray-300 rounded-lg" type="date" name="date_to" value="{{ date_to }}" />
+
+          <div class="md:col-span-4 flex justify-end gap-4">
+            <button
+              type="submit"
+              class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
+            >
+              Filter
+            </button>
+
+            <a
+              href="{% url 'events' %}"
+              class="bg-gray-400 text-white px-6 py-2 rounded-lg hover:bg-gray-500 transition"
+            >
+              Clear Filter
+            </a>
+          </div>
+        </form>
+
+    {% if request.GET.search or request.GET.category or request.GET.date_from or request.GET.date_to %}
+  <h1 class="text-3xl font-bold text-center mb-6">
+    Showing results for:
+    {% if request.GET.search %}
+      <span class="text-blue-700">"{{ request.GET.search }}"</span>
+    {% endif %}
+
+    {% if request.GET.category %}
+      in category <span class="text-indigo-600">"{{ request.GET.category }}"</span>
+    {% endif %}
+
+    {% if request.GET.date_from and request.GET.date_to %}
+      from <span class="text-indigo-600">{{ request.GET.date_from }}</span> 
+      to <span class="text-indigo-600">{{ request.GET.date_to }}</span>
+    {% elif request.GET.date_from %}
+      from <span class="text-indigo-600">{{ request.GET.date_from }}</span>
+    {% elif request.GET.date_to %}
+      up to <span class="text-indigo-600">{{ request.GET.date_to }}</span>
+    {% endif %}
+  </h1>
+{% else %}
+  <h1 class="text-3xl font-bold text-center mb-6">All Events</h1>
+{% endif %}
