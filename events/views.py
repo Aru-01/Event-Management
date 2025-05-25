@@ -1,14 +1,16 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from events.models import Event, Category
+from events.models import Event, Category, Participant
 from events.forms import EventModelForm, CategoryForm, ParticipantForm
 from django.contrib import messages
-from django.db.models import Q
+from django.db.models import Q, Count
+from django.utils.timezone import localtime
 
 
 # Create your views here.
 def home(request):
-    return render(request, "Home/home.html")
+    events = Event.objects.all()[:4]
+    return render(request, "Home/home.html", {"events": events})
 
 
 def events(request):
@@ -54,8 +56,46 @@ def contact(request):
     return render(request, "Contact/contact.html")
 
 
+from datetime import date
+
+
 def dashboard(request):
-    return render(request, "Dashboard/dashboard.html")
+    event_type = request.GET.get("type", "today")
+
+    base_query = Event.objects.select_related("category").prefetch_related(
+        "participants"
+    )
+
+    today = localtime().date()
+    print("\n\n", today, "\n\n")
+    if event_type == "upcoming":
+        events = base_query.filter(date__gt=today)
+    elif event_type == "past":
+        events = base_query.filter(date__lt=today)
+    elif event_type == "today":
+        events = base_query.filter(date=today)
+    else:
+        events = base_query
+
+    counts = Event.objects.aggregate(
+        total=Count("id"),
+        upcoming=Count("id", filter=Q(date__gt=today)),
+        past=Count("id", filter=Q(date__lt=today)),
+        today=Count("id", filter=Q(date=today)),
+    )
+
+    total_participants = Participant.objects.count()
+    total_categories = Category.objects.count()
+
+    context = {
+        "events": events,
+        "counts": counts,
+        "total_participants": total_participants,
+        "total_categories": total_categories,
+        "event_type": event_type,
+    }
+
+    return render(request, "Dashboard/dashboard.html", context)
 
 
 def create_event(request):
@@ -63,8 +103,14 @@ def create_event(request):
 
     if request.method == "POST":
         form = EventModelForm(request.POST, request.FILES)
+        print(request.POST)
         if form.is_valid():
-            form.save()
+            event = form.save(commit=False)
+            event.save()
+            participants = form.cleaned_data.get("participants")
+            if participants:
+                event.participants.set(participants)
+
             messages.success(request, "Event created successfully!")
             return redirect("events")
     context = {"form": form}
@@ -100,3 +146,18 @@ def add_participant(request):
         form = ParticipantForm()
     context = {"participant_form": form}
     return render(request, "Dashboard/add_participant/add_participant.html", context)
+
+
+def Total_Participants(request):
+    return render(request, "Dashboard/Total_Participants/Total_Participants.html")
+
+
+def Total_Categories(request):
+    return render(request, "Dashboard/Total_Categories/Total_Categories.html")
+
+
+def event_details(request, id):
+    event = Event.objects.get(id=id)
+    participants = event.participants.all()
+    context = {"event": event, "participants": participants}
+    return render(request, "shared/event_details.html", context)

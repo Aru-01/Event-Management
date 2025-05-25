@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Total Categories</title>
+    <link rel="stylesheet" href="{% static 'css/output.css' %}" />
+  </head>
+  <body
+    class="bg-gradient-to-br from-indigo-100 via-white to-purple-100 min-h-screen"
+  >
+    <div>{% include '../../shared/nav.html' %}</div>
+
+    <div>{% include '../../shared/footer.html' %}</div>
+
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        const toast = document.getElementById("toast");
+        if (toast) {
+          setTimeout(() => {
+            toast.style.opacity = "0";
+            setTimeout(() => toast.remove(), 500);
+          }, 3000);
+        }
+      });
+      document
+        .getElementById("menuBtn")
+        ?.addEventListener("click", function () {
+          const menu = document.getElementById("mobileMenu");
+          menu.classList.toggle("hidden");
+        });
+    </script>
+  </body>
+</html>

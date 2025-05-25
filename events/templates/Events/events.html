@@ -15,7 +15,7 @@
       {% if events %}
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for event in events %}
-        <div class="">{% include "Events/events_card.html" %}</div>
+        <div class="">{% include "../shared/events_card.html" %}</div>
         {% empty %}
         <p class="text-center text-red-600 col-span-3">No events found.</p>
         {% endfor %}

@@ -4,33 +4,33 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home</title>
+    <title>Dashboard</title>
     <link href="{% static 'css/output.css' %}" rel="stylesheet" />
   </head>
   <body class="bg-gray-100">
-    <div class="">{% include "../shared/nav.html" %}</div>
-    <!-- dashboard.html -->
-    <div
-      class="md:h-[50vh] bg-gradient-to-br from-indigo-100 via-white to-purple-100 py-16 px-6 text-center"
-    >
-      <h1 class="text-3xl font-bold text-gray-800 mb-6">
-         Welcome to Event Manager
-      </h1>
-      <p class="text-gray-600 mb-10">
-        Manage and create your events with ease.
-      </p>
+    <div>{% include "../shared/nav.html" %}</div>
 
-      <a
-        href="{% url 'create_event' %}"
-        class="inline-block bg-indigo-600 text-white text-lg px-6 py-3 rounded-full shadow-md hover:bg-indigo-700 transition"
-      >
-        ➕ Create New Event
-      </a>
+    <div class="">{% include "Dashboard/Dashboard/hero.html" %}</div>
+
+    <div class="">{% include "Dashboard/Dashboard/statics_card.html" %}</div>
+
+    <div class="max-w-6xl mx-auto px-4 py-8">
+      <h3 class="text-xl font-bold mb-4">
+        {% if event_type == "upcoming" %} Upcoming Events {% elif event_type ==
+        "past" %} Past Events {% elif event_type == "today" %} Today's Events {%
+        else %} All Events {% endif %}
+      </h3>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% if events %} {% for event in events %}
+        <div class="">{% include "../shared/events_card.html" %}</div>
+        {% endfor %} {% else %}
+        <p class="text-gray-500">No events scheduled for today.</p>
+        {% endif %}
+      </div>
     </div>
 
-    <div class="">{% include "../shared/footer.html" %}</div>
-
-    {% comment %} nav toogle er jonno {% endcomment %}
+    <div>{% include "../shared/footer.html" %}</div>
     <script>
       document.getElementById("menuBtn").addEventListener("click", function () {
         const menu = document.getElementById("mobileMenu");

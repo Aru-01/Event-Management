@@ -1,11 +1,21 @@
+{% load static %}
 <div
   class="bg-white rounded-2xl shadow-md hover:shadow-xl transition duration-300 overflow-hidden"
 >
+  {% if event.img %}
   <img
     src="{{ event.img.url }}"
     alt="{{ event.name }}"
     class="w-full h-48 object-cover"
   />
+{% else %}
+  <img
+    src="{% static 'sample-images/no.png' %}"
+    alt="No image available"
+    class="w-full h-48 object-cover"
+  />
+{% endif %}
+
   <div class="p-4">
     <h2 class="text-xl font-semibold text-gray-800 mb-1">{{ event.name }}</h2>
     <p class="text-sm text-gray-500 mb-1">
@@ -21,7 +31,7 @@
       {{ event.description }}
     </p>
     <a
-      href="#"
+      href="{% url "event_details" event.id %}"
       class="inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
       >View Details</a
     >

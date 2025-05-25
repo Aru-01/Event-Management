@@ -6,6 +6,9 @@ from events.views import (
     create_event,
     add_category,
     add_participant,
+    Total_Participants,
+    Total_Categories,
+    event_details,
 )
 
 urlpatterns = [
@@ -15,4 +18,9 @@ urlpatterns = [
     path("create-event/", create_event, name="create_event"),
     path("add-category/", add_category, name="add_category"),
     path("add-participant/", add_participant, name="add_participant"),
+    path(
+        "Dashboard/Total-Participants/", Total_Participants, name="Total_Participants"
+    ),
+    path("Dashboard/Total_Categories/", Total_Categories, name="Total_Categories"),
+    path("Event-details/<int:id>/", event_details, name="event_details"),
 ]

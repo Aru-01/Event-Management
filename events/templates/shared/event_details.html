@@ -1,0 +1,93 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Details</title>
+    <link href="{% static 'css/output.css' %}" rel="stylesheet" />
+  </head>
+  <body class="bg-gray-100">
+    <div>{% include "shared/nav.html" %}</div>
+
+    <div
+      class="max-w-4xl my-12 mx-auto bg-white rounded-xl shadow-md overflow-hidden md:flex md:flex-col"
+    >
+      {% if event.img %}
+      <img
+        src="{{ event.img.url }}"
+        alt="{{ event.name }}"
+        class="w-full h-48 object-cover"
+      />
+      {% else %}
+      <img
+        src="{% static 'sample-images/no.png' %}"
+        alt="No image available"
+        class="w-full h-48 object-cover"
+      />
+      {% endif %}
+
+      <div class="p-6 space-y-4">
+        <h2 class="text-3xl font-bold text-gray-800">{{ event.name }}</h2>
+        <p class="text-gray-700">{{ event.description }}</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-600">
+          <p><strong>📍 Location:</strong> {{ event.location }}</p>
+          <p><strong>📅 Date:</strong> {{ event.date }}</p>
+          <p>
+            <strong>👥 Participants:</strong> {{ event.participants.count }}
+          </p>
+          <p><strong>🏷️ Category:</strong> {{ event.category.name }}</p>
+        </div>
+
+        <div class="mt-6">
+          <h3 class="text-xl font-semibold text-gray-800 mb-2">Participants</h3>
+          {% if event.participants.all %}
+          <ul class="space-y-2">
+            {% for participant in event.participants.all %}
+            <li class="bg-gray-100 p-3 rounded-lg shadow-sm">
+              <p><strong>Name:</strong> {{ participant.name }}</p>
+              <p><strong>E-mail:</strong> {{ participant.email }}</p>
+            </li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <p class="text-gray-500 italic">
+            No participants have joined this event yet.
+          </p>
+          {% endif %}
+        </div>
+
+        <div class="flex flex-wrap gap-4 mt-6">
+          <a
+            href=""
+            class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg transition"
+          >
+            ✏️ Edit Event
+          </a>
+          <form
+            action=""
+            method="POST"
+            onsubmit="return confirm('Are you sure you want to delete this event?');"
+          >
+            {% csrf_token %}
+            <button
+              type="submit"
+              class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition"
+            >
+              🗑️ Delete Event
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div>{% include "shared/footer.html" %}</div>
+    <script>
+      document.getElementById("menuBtn").addEventListener("click", function () {
+        const menu = document.getElementById("mobileMenu");
+        menu.classList.toggle("hidden");
+      });
+    </script>
+  </body>
+</html>
