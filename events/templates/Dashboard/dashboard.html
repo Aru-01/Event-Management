@@ -16,9 +16,11 @@
 
     <div class="max-w-6xl mx-auto px-4 py-8">
       <h3 class="text-xl font-bold mb-4">
-        {% if event_type == "upcoming" %} Upcoming Events {% elif event_type ==
-        "past" %} Past Events {% elif event_type == "today" %} Today's Events {%
-        else %} All Events {% endif %}
+        {% if event_type == "upcoming" %} Upcoming Events 
+        {% elif event_type == "past" %} Past Events 
+        {% elif event_type == "today" %} Today's Events 
+        {% else %} All Events 
+        {% endif %}
       </h3>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

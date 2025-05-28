@@ -3,8 +3,10 @@ from django.http import HttpResponse
 from events.models import Event, Category, Participant
 from events.forms import EventModelForm, CategoryForm, ParticipantForm
 from django.contrib import messages
+from datetime import date
 from django.db.models import Q, Count
 from django.utils.timezone import localtime
+
 
 
 # Create your views here.
@@ -20,7 +22,9 @@ def events(request):
     date_to = request.GET.get("date_to", "")
 
     events = (
-        Event.objects.select_related("category").prefetch_related("participants").all()
+        Event.objects.select_related("category")
+        .prefetch_related("participants")
+        .order_by("-date")
     )
 
     if search:
@@ -54,9 +58,6 @@ def events(request):
 
 def contact(request):
     return render(request, "Contact/contact.html")
-
-
-from datetime import date
 
 
 def dashboard(request):
@@ -123,7 +124,7 @@ def add_category(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Category added successfully!")
-            return redirect("create_event")
+            return redirect("Total_Categories")
         else:
             messages.error(request, "Something Went wrong.")
     else:
@@ -139,7 +140,7 @@ def add_participant(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Participant added successfully!")
-            return redirect("create_event")
+            return redirect("Total_Participants")
         else:
             messages.error(request, "Something Went wrong.")
     else:
@@ -148,12 +149,42 @@ def add_participant(request):
     return render(request, "Dashboard/add_participant/add_participant.html", context)
 
 
+def delete_participant(request, id):
+    if request.method == "POST":
+        # print("\n\n", id, "\n\n")
+        participant = Participant.objects.get(id=id)
+        participant.delete()
+        return redirect("Total_Participants")
+    else:
+        return redirect("Total_Participants")
+
+
 def Total_Participants(request):
-    return render(request, "Dashboard/Total_Participants/Total_Participants.html")
+    participants = Participant.objects.all()
+    return render(
+        request,
+        "Dashboard/Total_Participants/Total_Participants.html",
+        {"participants": participants},
+    )
 
 
 def Total_Categories(request):
-    return render(request, "Dashboard/Total_Categories/Total_Categories.html")
+    categories = Category.objects.all()
+    return render(
+        request,
+        "Dashboard/Total_Categories/Total_Categories.html",
+        {"categories": categories},
+    )
+
+
+def delete_category(request, id):
+    if request.method == "POST":
+        # print("\n\n", id, "\n\n")
+        category = Category.objects.get(id=id)
+        category.delete()
+        return redirect("Total_Categories")
+    else:
+        return redirect("Total_Categories")
 
 
 def event_details(request, id):
@@ -161,3 +192,36 @@ def event_details(request, id):
     participants = event.participants.all()
     context = {"event": event, "participants": participants}
     return render(request, "shared/event_details.html", context)
+
+
+def delete_event(request, id):
+    if request.method == "POST":
+        # print("\n\n", id, "\n\n")
+        event = Event.objects.get(id=id)
+        event.delete()
+        return redirect("events")
+    else:
+        return redirect("events")
+
+
+def update_event(request, id):
+    event = Event.objects.get(id=id)
+    form = EventModelForm(instance=event)
+    if request.method == "POST":
+        form = EventModelForm(request.POST, request.FILES, instance=event)
+        # print(request.POST)
+        if form.is_valid():
+            event = form.save(commit=False)
+            if "img" in request.FILES:
+                event.img = request.FILES["img"]
+            else:
+                event.img = event.img
+            event.save()
+            participants = form.cleaned_data.get("participants")
+            if participants:
+                event.participants.set(participants)
+
+            messages.success(request, "Event created successfully!")
+            return redirect("events")
+    context = {"form": form}
+    return render(request, "Create_event/create_event.html", context)
