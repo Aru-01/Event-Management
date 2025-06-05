@@ -4,12 +4,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Contact us</title>
+    <title>{% block title %}{% endblock title %}</title>
     <link href="{% static 'css/output.css' %}" rel="stylesheet" />
   </head>
   <body class="bg-gray-100">
-    <div class="">{% include "../shared/nav.html" %}</div>
-    <div class="">{% include "../shared/footer.html" %}</div>
+    <div class="">{% include "core_shared/nav.html" %}</div>
+    {% block contents %}{% endblock contents %}
+    <div class="">{% include "core_shared/footer.html" %}</div>
 
     {% comment %} nav toogle er jonno {% endcomment %}
     <script>

@@ -1,82 +1,53 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Total Categories</title>
-    <link rel="stylesheet" href="{% static 'css/output.css' %}" />
-  </head>
-  <body
-    class="bg-gradient-to-br from-indigo-100 via-white to-purple-100 min-h-screen"
-  >
-    <div>{% include '../../shared/nav.html' %}</div>
+{% extends "base.html" %} {% block title %}Total Category {% endblock title %}
+{% block contents %}
+<section
+  class="bg-gradient-to-br from-indigo-100 via-white to-purple-100 min-h-screen"
+>
+  <div class="shadow-lg rounded-xl p-6 mt-8 w-full max-w-4xl mx-auto my-12">
+    <h2 class="text-xl font-semibold text-gray-800 mb-4 text-center">
+      All Categories
+    </h2>
 
-    <div class="shadow-lg rounded-xl p-6 mt-8 w-full max-w-4xl mx-auto my-12">
-      <h2 class="text-xl font-semibold text-gray-800 mb-4 text-center">
-        All Categories
-      </h2>
-
-      <table class="w-full border border-gray-300 rounded-lg overflow-hidden">
-        <thead class="bg-gray-100">
-          <tr>
-            <th class="text-left px-4 py-2">SL</th>
-            <th class="text-left px-4 py-2">Category Name</th>
-            <th class="text-left px-4 py-2">Category Description</th>
-            <th class="text-left px-4 py-2">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for category in categories %}
-          <tr class="border-t border-gray-200">
-            <td class="px-4 py-2">{{ forloop.counter }}</td>
-            <td class="px-4 py-2">{{ category.name }}</td>
-            <td class="px-4 py-2">{{ category.description }}</td>
-            <td class="px-4 py-2">
-              <form
-                method="POST"
-                action="{% url 'delete_category' category.id %}"
+    <table class="w-full border border-gray-300 rounded-lg overflow-hidden">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="text-left px-4 py-2">SL</th>
+          <th class="text-left px-4 py-2">Category Name</th>
+          <th class="text-left px-4 py-2">Category Description</th>
+          <th class="text-left px-4 py-2">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for category in categories %}
+        <tr class="border-t border-gray-200">
+          <td class="px-4 py-2">{{ forloop.counter }}</td>
+          <td class="px-4 py-2">{{ category.name }}</td>
+          <td class="px-4 py-2">{{ category.description }}</td>
+          <td class="px-4 py-2">
+            <form
+              method="POST"
+              action="{% url 'delete_category' category.id %}"
+            >
+              {% csrf_token %}
+              <button
+                type="submit"
+                class="bg-red-500 hover:bg-red-600 text-white text-sm px-3 py-1 rounded"
+                onclick="return confirm('Are you sure you want to delete this Category?');"
               >
-                {% csrf_token %}
-                <button
-                  type="submit"
-                  class="bg-red-500 hover:bg-red-600 text-white text-sm px-3 py-1 rounded"
-                  onclick="return confirm('Are you sure you want to delete this Category?');"
-                >
-                  Delete
-                </button>
-              </form>
-            </td>
-          </tr>
-          {% empty %}
-          <tr>
-            <td colspan="4" class="text-center text-gray-500 py-4">
-              No Categories found.
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-
-    <div>{% include '../../shared/footer.html' %}</div>
-
-    <script>
-      window.addEventListener("DOMContentLoaded", () => {
-        const toast = document.getElementById("toast");
-        if (toast) {
-          setTimeout(() => {
-            toast.style.opacity = "0";
-            setTimeout(() => toast.remove(), 500);
-          }, 3000);
-        }
-      });
-      document
-        .getElementById("menuBtn")
-        ?.addEventListener("click", function () {
-          const menu = document.getElementById("mobileMenu");
-          menu.classList.toggle("hidden");
-        });
-    </script>
-  </body>
-</html>
+                Delete
+              </button>
+            </form>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="4" class="text-center text-gray-500 py-4">
+            No Categories found.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock contents %}

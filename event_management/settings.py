@@ -29,6 +29,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "events",
+    "core",
+    "user",
     "debug_toolbar",
 ]
 
@@ -79,25 +81,25 @@ WSGI_APPLICATION = "event_management.wsgi.application"
 # }
 
 # postgres-sql database
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "NAME": "event_manager",
-#         "USER": "postgres",
-#         "PASSWORD": "password",
-#         "HOST": "localhost",
-#         "PORT": "5432",
-#     }
-# }
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "event_manager",
+        "USER": "postgres",
+        "PASSWORD": "password",
+        "HOST": "localhost",
+        "PORT": "5432",
+    }
+}
 
 # render postgress
-DATABASES = {
-    "default": dj_database_url.config(
-        # Replace this value with your local database's connection string.
-        default="postgresql://event_manager_db_03ud_user:Pdpifk1YD94Gs8P3LyycG3wwylOhbX3z@dpg-d0rl9dre5dus7382jfcg-a.oregon-postgres.render.com/event_manager_db_03ud",
-        conn_max_age=600,
-    )
-}
+# DATABASES = {
+#     "default": dj_database_url.config(
+#         # Replace this value with your local database's connection string.
+#         default="postgresql://event_manager_db_03ud_user:Pdpifk1YD94Gs8P3LyycG3wwylOhbX3z@dpg-d0rl9dre5dus7382jfcg-a.oregon-postgres.render.com/event_manager_db_03ud",
+#         conn_max_age=600,
+#     )
+# }
 
 
 # Password validation

@@ -4,11 +4,12 @@ from django.conf.urls.static import static
 from django.urls import path, include
 from debug_toolbar.toolbar import debug_toolbar_urls
 
-from events.views import home
+from core.views import home, contact
 
 
 urlpatterns = [
     path("", home, name="home"),
+    path("/contact-us", contact, name="contact-us"),
     path("", include("events.urls")),
     path("admin/", admin.site.urls),
 ] + debug_toolbar_urls()

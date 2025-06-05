@@ -1,44 +1,20 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Create Event</title>
-    <link rel="stylesheet" href="{% static 'css/output.css' %}" />
-  </head>
-  <body>
-    <div>{% include '../shared/nav.html' %}</div>
+{% extends "base.html" %} 
+{% block title %}
+Create Event| E-Management
+{% endblock title %}
 
-    <div
-      class="bg-gradient-to-br from-indigo-100 via-white to-purple-100 min-h-screen flex items-center justify-center py-10"
-    >
-      {% if messages %}
-      <ul>
-        {% for message in messages %}
-        <li class="text-green-600">{{ message }}</li>
-        {% endfor %}
-      </ul>
-      {% endif %}
+{% block contents%}
+<div
+  class="bg-gradient-to-br from-indigo-100 via-white to-purple-100 min-h-screen flex items-center justify-center py-10"
+>
+  {% if messages %}
+  <ul>
+    {% for message in messages %}
+    <li class="text-green-600">{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
 
-      <div class="">{% include 'Create_event/create_event_form.html' %}</div>
-    </div>
-
-    <div>{% include '../shared/footer.html' %}</div>
-
-    <script>
-      function openModal(id) {
-        document.getElementById(id).classList.remove("hidden");
-      }
-      function closeModal(id) {
-        document.getElementById(id).classList.add("hidden");
-      }
-      document
-        .getElementById("menuBtn")
-        ?.addEventListener("click", function () {
-          const menu = document.getElementById("mobileMenu");
-          menu.classList.toggle("hidden");
-        });
-    </script>
-  </body>
-</html>
+  <div class="">{% include 'Create_event/create_event_form.html' %}</div>
+</div>
+{% endblock contents%}
