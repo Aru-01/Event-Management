@@ -2,3 +2,6 @@ db.sqlite3
 node_modules/
 event_env/
 event_management/__pycache__/
+user/__pycache__/
+core/__pycache__/
+.env

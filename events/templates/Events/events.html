@@ -1,41 +1,20 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Events</title>
-    <link href="{% static 'css/output.css' %}" rel="stylesheet" />
-  </head>
-  <body class="bg-gray-100">
-    <div>{% include "../shared/nav.html" %}</div>
-
-    <div class="container mx-auto px-4 py-8">
-      <div class="">{% include "Events/events_filter.html" %}</div>
-      {% if events %}
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {% for event in events %}
-        <div class="">{% include "../shared/events_card.html" %}</div>
-        {% empty %}
-        <p class="text-center text-red-600 col-span-3">No events found.</p>
-        {% endfor %}
-      </div>
-      {% else %}
-      <p class="text-center text-red-500 mt-8">
-        No events found for the applied filters.
-      </p>
-      {% endif %}
-    </div>
-
-    <div>{% include "../shared/footer.html" %}</div>
-
-    <script>
-      document
-        .getElementById("menuBtn")
-        ?.addEventListener("click", function () {
-          const menu = document.getElementById("mobileMenu");
-          menu.classList.toggle("hidden");
-        });
-    </script>
-  </body>
-</html>
+{% extends "base.html" %}
+{% block title %}Events | E-Management{% endblock title %}
+{% block contents %}
+<div class="container mx-auto px-4 py-8">
+  <div class="">{% include "Events/events_filter.html" %}</div>
+  {% if events %}
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for event in events %}
+    <div class="">{% include "../shared/events_card.html" %}</div>
+    {% empty %}
+    <p class="text-center text-red-600 col-span-3">No events found.</p>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="text-center text-red-500 mt-8">
+    No events found for the applied filters.
+  </p>
+  {% endif %}
+</div>
+{% endblock contents %}

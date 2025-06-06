@@ -1,19 +1,13 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from events.models import Event, Category, Participant
 from events.forms import EventModelForm, CategoryForm, ParticipantForm
 from django.contrib import messages
-from datetime import date
 from django.db.models import Q, Count
 from django.utils.timezone import localtime
 
 
 
 # Create your views here.
-def home(request):
-    events = Event.objects.all()[:4]
-    return render(request, "Home/home.html", {"events": events})
-
 
 def events(request):
     search = request.GET.get("search", "")
@@ -54,10 +48,6 @@ def events(request):
         "date_to": date_to,
     }
     return render(request, "Events/events.html", context)
-
-
-def contact(request):
-    return render(request, "Contact/contact.html")
 
 
 def dashboard(request):

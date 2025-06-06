@@ -21,7 +21,9 @@ class Participant(models.Model):
 class Event(models.Model):
     name = models.CharField(max_length=250)
     description = models.TextField()
-    img = models.ImageField(upload_to="event-img/", blank=True, null=True)
+    img = models.ImageField(
+        upload_to="event-img/", blank=True, null=True, default="sample-images/no.png"
+    )
     date = models.DateField()
     time = models.TimeField()
     location = models.CharField(max_length=250)

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Home | E-Management{% endblock title %}
+{% block contents %}
+<section>
+  <div class="">{% include 'Home/hero.html' %}</div>  
+     <section class="bg-white border-y border-gray-200 py-16">
+       <div class="max-w-7xl  mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold text-center text-gray-900">
+          Our Best Events
+        </h2>
+        <div class="w-24 h-1 bg-indigo-500 mx-auto mt-2 mb-10 rounded"></div>
+         <div class="grid grid-cols-1 md:grid-cols-2  gap-6">
+        {% for event in events %}
+        <div class="bg-white shadow-md rounded-lg overflow-hidden">
+          {% if event.img %}
+          <img src="{{ event.img.url }}" alt="{{ event.name }}" class="w-full h-48 object-cover">
+          {% endif %}
+          <div class="p-4">
+            <h3 class="text-xl font-semibold mb-2">{{ event.name }}</h3>
+           <p class="text-sm text-gray-500 mb-1">
+        📅 {{ event.date }} &nbsp; ⏰ {{ event.time }}
+      </p>
+            <p class="text-gray-600 text-sm">{{ event.description|truncatewords:20 }}</p>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+     </section>
+  <div class="">{% include "Home/why_choice.html" %}</div>
+</section>
+{% endblock contents %}
+
+

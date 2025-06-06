@@ -1,82 +1,54 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Add Participant</title>
-    <link rel="stylesheet" href="{% static 'css/output.css' %}" />
-  </head>
-  <body
-    class="bg-gradient-to-br from-indigo-100 via-white to-purple-100 min-h-screen"
-  >
-    <div>{% include '../../shared/nav.html' %}</div>
-
-    <div class="flex items-center justify-center py-10 px-4">
-      {% if messages %}
-      <div
-        id="toast"
-        class="fixed top-5 right-1/2 bg-green-500 text-white px-4 py-2 rounded shadow-lg transition-opacity duration-500"
-      >
-        {% for message in messages %} {{ message }} {% endfor %}
-      </div>
-      {% endif %}
-
-      <div class="bg-white shadow-lg rounded-lg w-full max-w-md p-8">
-        <h3 class="text-2xl font-bold text-center text-gray-800 mb-6">
-          Add New Participant
-        </h3>
-
-        <form method="POST" class="space-y-4">
-          {% csrf_token %}
-
-          <div>
-            <label
-              for="id_name"
-              class="block text-sm font-medium text-gray-700 mb-1"
-              >Name</label
-            >
-            {{ participant_form.name }}
-          </div>
-          <div>
-            <label
-              for="id_email"
-              class="block text-sm font-medium text-gray-700 mb-1"
-              >Email</label
-            >
-            {{ participant_form.email }}
-          </div>
-
-          <div class="text-center pt-4">
-            <button
-              type="submit"
-              class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition duration-200"
-            >
-              Add Participant
-            </button>
-          </div>
-        </form>
-      </div>
+{% extends "base.html" %}
+{% block title %}Add Participant{% endblock title %}
+{% block contents %}
+<section
+  class="bg-gradient-to-br from-indigo-100 via-white to-purple-100 min-h-screen"
+>
+  <div class="flex items-center justify-center py-10 px-4">
+    {% if messages %}
+    <div
+      id="toast"
+      class="fixed top-5 right-1/2 bg-green-500 text-white px-4 py-2 rounded shadow-lg transition-opacity duration-500"
+    >
+      {% for message in messages %} {{ message }} {% endfor %}
     </div>
+    {% endif %}
 
-    <div>{% include '../../shared/footer.html' %}</div>
+    <div class="bg-white shadow-lg rounded-lg w-full max-w-md p-8">
+      <h3 class="text-2xl font-bold text-center text-gray-800 mb-6">
+        Add New Participant
+      </h3>
 
-    <script>
-      window.addEventListener("DOMContentLoaded", () => {
-        const toast = document.getElementById("toast");
-        if (toast) {
-          setTimeout(() => {
-            toast.style.opacity = "0";
-            setTimeout(() => toast.remove(), 500);
-          }, 3000);
-        }
-      });
-      document
-        .getElementById("menuBtn")
-        ?.addEventListener("click", function () {
-          const menu = document.getElementById("mobileMenu");
-          menu.classList.toggle("hidden");
-        });
-    </script>
-  </body>
-</html>
+      <form method="POST" class="space-y-4">
+        {% csrf_token %}
+
+        <div>
+          <label
+            for="id_name"
+            class="block text-sm font-medium text-gray-700 mb-1"
+            >Name</label
+          >
+          {{ participant_form.name }}
+        </div>
+        <div>
+          <label
+            for="id_email"
+            class="block text-sm font-medium text-gray-700 mb-1"
+            >Email</label
+          >
+          {{ participant_form.email }}
+        </div>
+
+        <div class="text-center pt-4">
+          <button
+            type="submit"
+            class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition duration-200"
+          >
+            Add Participant
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock contents %}
