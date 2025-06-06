@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{% static "css/output.css" %}" />
+  </head>
+  <body>
+    {% include "core_shared/admin_dash_nav.html" %}
+
+    <main class="bg-gradient-to-br from-indigo-100 via-white to-purple-100">
+      <div class="container mx-auto px-6 py-4">
+        {% block contents %} 
+        {% include "admin/Total_Participants/Total_Participants.html" %}
+        {% comment %} contents {% endcomment %} 
+        {% endblock contents %}
+      </div>
+    </main>
+
+    <script>
+      // Toggle mobile menu
+      document.getElementById("menuBtn").addEventListener("click", function () {
+        const mobileMenu = document.getElementById("mobileMenu");
+        mobileMenu.classList.toggle("hidden");
+      });
+
+      // Toggle user dropdown
+      const userBtn = document.getElementById("userMenuBtn");
+      const userDropdown = document.getElementById("userDropdown");
+      if (userBtn) {
+        userBtn.addEventListener("click", () => {
+          userDropdown.classList.toggle("hidden");
+        });
+      }
+    </script>
+  </body>
+</html>

@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group, Permission
 import re
 
 
@@ -67,3 +67,38 @@ class CustomRegisterForm(forms.ModelForm):
             raise forms.ValidationError("Password don't match")
 
         return cleaned_data
+
+
+class CreateGroupForm(forms.ModelForm):
+    permissions = forms.ModelMultipleChoiceField(
+        queryset=Permission.objects.select_related("content_type").all(),
+        widget=forms.CheckboxSelectMultiple(),
+        required=False,
+        label="Assign Permissions",
+    )
+
+    class Meta:
+        model = Group
+        fields = ["name", "permissions"]
+        widgets = {
+            "name": forms.TextInput(
+                attrs={
+                    "class": "w-full border border-gray-300 rounded px-3 py-2",
+                    "placeholder": "Enter Group Name",
+                }
+            )
+        }
+
+
+class ChangeRoleForm(forms.Form):
+    role = forms.ModelChoiceField(
+        queryset=Group.objects.all(), empty_label="Select a Role.."
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["role"].widget.attrs.update(
+            {
+                "class": "block w-full py-2.5 px-4 pr-10 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            }
+        )

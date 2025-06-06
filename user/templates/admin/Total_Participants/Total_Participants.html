@@ -1,0 +1,137 @@
+<section class="min-h-screen">
+  <div
+    class="shadow-lg rounded-xl bg-indigo-50 bg-opacity-60 font-medium p-6 mt-8 w-full max-w-6xl mx-auto my-12"
+  >
+    <h2 class="text-3xl font-bold text-center text-gray-900">All Users</h2>
+    <div class="w-16 h-1 bg-indigo-500 mx-auto mt-2 mb-10 rounded"></div>
+
+    <!-- normal view -->
+    <div class="overflow-x-auto">
+      <table class="w-full border border-gray-300 rounded-lg hidden md:table">
+        <thead class="bg-gray-100 text-sm">
+          <tr>
+            <th class="text-left px-4 py-2">SL</th>
+            <th class="text-left px-4 py-2">User Name</th>
+            <th class="text-left px-4 py-2">Name</th>
+            <th class="text-center px-4 py-2">Email</th>
+            <th class="text-left px-4 py-2">Role</th>
+            <th class="text-center px-4 py-2" colspan="2">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in users %}
+          <tr
+            class="border-t border-gray-200 text-sm hover:bg-indigo-100 transition"
+          >
+            <td class="px-4 py-2">{{ forloop.counter }}</td>
+            <td class="px-4 py-2">{{ user.username }}</td>
+            <td class="px-4 py-2">
+              {{ user.first_name }} {{ user.last_name }}
+            </td>
+            <td class="px-4 py-2 text-center">{{ user.email }}</td>
+            <td class="px-4 py-4">{{ user.group_name }}</td>
+            <td class="px-4 py-4 text-center">
+              <a
+                href="{% url "change-role"  user.id%}"
+                class="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded text-sm"
+                >Change Role</a
+              >
+            </td>
+            <td class="px-4 py-2 text-center">
+              <!-- Delete Button triggers modal -->
+              <button
+                type="button"
+                class="bg-red-500 hover:bg-red-600 text-white text-sm px-3 py-1 rounded"
+                onclick="openModal('deleteModal{{ user.id }}')"
+              >
+                Delete
+              </button>
+
+              <!-- Modal -->
+              <div
+                id="deleteModal{{ user.id }}"
+                class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50"
+              >
+                <div class="bg-white rounded-lg shadow-lg max-w-sm w-full p-6">
+                  <h3 class="text-lg font-semibold mb-4">Confirm Delete</h3>
+                  <p class="mb-6">Are you sure you want to delete the user <strong>{{ user.username }}</strong>?</p>
+                  <div class="flex justify-end space-x-4">
+                    <button
+                      onclick="closeModal('deleteModal{{ user.id }}')"
+                      class="px-4 py-2 rounded border border-gray-300 hover:bg-gray-100"
+                    >
+                      Cancel
+                    </button>
+                    <form method="POST" action="{% url 'delete-user' user.id %}">
+                      {% csrf_token %}
+                      <button
+                        type="submit"
+                        class="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700"
+                      >
+                        Confirm Delete
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </td>
+
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="7" class="text-center text-gray-500 py-4">
+              No participants found.
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <!--  Mobile Version  -->
+      <div class="md:hidden space-y-4">
+        {% for user in users %}
+        <div class="bg-white p-4 rounded-lg shadow border">
+          <div class="flex justify-between items-center mb-2">
+            <div class="font-semibold text-indigo-700">
+              {{ user.first_name }} {{ user.last_name }}
+            </div>
+            <span class="text-xs bg-gray-200 text-gray-600 px-2 py-0.5 rounded"
+              >{{ user.group_name }}</span
+            >
+          </div>
+          <div class="text-sm text-gray-700">
+            <p><strong>Username:</strong> {{ user.username }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+          </div>
+          <div class="flex justify-end gap-2 mt-3">
+            <a
+              href="#"
+              class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded text-sm"
+              >Change Role</a
+            >
+            <form method="POST">
+              {% csrf_token %}
+              <button
+                type="submit"
+                class="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded text-sm"
+              >
+                Delete
+              </button>
+            </form>
+          </div>
+        </div>
+        {% empty %}
+        <div class="text-center text-gray-500">No participants found.</div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  function openModal(id) {
+    document.getElementById(id).classList.remove('hidden');
+  }
+  function closeModal(id) {
+    document.getElementById(id).classList.add('hidden');
+  }
+</script>

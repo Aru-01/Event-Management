@@ -10,7 +10,7 @@ urlpatterns = [
     path("", home, name="home"),
     path("contact-us/", contact, name="contact-us"),
     path("", include("events.urls")),
-    path("users/", include("user.urls")),
+    path("", include("user.urls")),
     path("admin/", admin.site.urls),
 ] + debug_toolbar_urls()
 
