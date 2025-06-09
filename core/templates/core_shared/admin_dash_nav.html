@@ -35,6 +35,11 @@
                 class="text-gray-700 hover:text-indigo-600 font-medium"
                 >Groups</a
               >
+              <a
+                href="{% url 'rsvp_dashboard' %}"
+                class="text-gray-700 hover:text-indigo-600 font-medium"
+                >Participated Events</a
+              >
               
             </div>
 
@@ -114,6 +119,11 @@
             href="{% url 'group-list' %}"
             class="block text-gray-700 hover:text-indigo-600"
             >Groups</a>
+             <a
+                href="{% url 'rsvp_dashboard' %}"
+                class="block text-gray-700 hover:text-indigo-600"
+                >Participated Events</a
+              >
            
         
           {% if user.is_authenticated %}

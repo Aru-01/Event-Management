@@ -82,25 +82,25 @@ WSGI_APPLICATION = "event_management.wsgi.application"
 # }
 
 # postgres-sql database
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": config("DB_NAME", default=""),
-        "USER": config("DB_USER", default=""),
-        "PASSWORD": config("DB_PASSWORD", default=""),
-        "HOST": config("DB_HOST", default="localhost"),
-        "PORT": config("DB_PORT", cast=int),
-    }
-}
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": config("DB_NAME", default=""),
+#         "USER": config("DB_USER", default=""),
+#         "PASSWORD": config("DB_PASSWORD", default=""),
+#         "HOST": config("DB_HOST", default="localhost"),
+#         "PORT": config("DB_PORT", cast=int),
+#     }
+# }
 
 # render postgress
-# DATABASES = {
-#     "default": dj_database_url.config(
-#         # Replace this value with your local database's connection string.
-#         default="postgresql://event_manager_db_03ud_user:Pdpifk1YD94Gs8P3LyycG3wwylOhbX3z@dpg-d0rl9dre5dus7382jfcg-a.oregon-postgres.render.com/event_manager_db_03ud",
-#         conn_max_age=600,
-#     )
-# }
+DATABASES = {
+    "default": dj_database_url.config(
+        # Replace this value with your local database's connection string.
+        default=config("DB_default"),
+        conn_max_age=600,
+    )
+}
 
 
 # Password validation
@@ -160,3 +160,4 @@ EMAIL_HOST_USER = config("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
 
 FRONTEND_URL = "http://127.0.0.1:8000"
+LOGIN_URL = "/users/sign-in/"

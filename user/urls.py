@@ -19,7 +19,7 @@ urlpatterns = [
     path("users/sign-in/", sign_in, name="sign-in"),
     path("users/sign-out/", sign_out, name="sign-out"),
     # admin related
-    path("admin/dashboard/", admin_dashboard, name="admin-dashboard"),
+    path("admin-dashboard/", admin_dashboard, name="admin-dashboard"),
     path("admin/dashboard/group-list", group_list, name="group-list"),
     path("admin/event-dashboard/", event_dashboard, name="event-dashboard"),
     path("admin/dashboard/create-group/", create_group, name="create-group"),
