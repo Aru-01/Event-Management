@@ -35,34 +35,50 @@
                 class="text-gray-700 hover:text-indigo-600 font-medium"
                 >Groups</a
               >
+              <a
+                href="{% url 'rsvp_dashboard' %}"
+                class="text-gray-700 hover:text-indigo-600 font-medium"
+                >Participated Events</a
+              >
               
             </div>
 
-            <!-- User Profile Dropdown Right -->
-            {% if user.is_authenticated %}
-            <div class="relative hidden md:block">
-              <button
-                id="userMenuBtn"
-                class="w-10 h-10 bg-indigo-600 text-white rounded-full flex items-center justify-center font-bold focus:outline-none"
-              >
-                {{ user.first_name|slice:":1"|upper }}{{ user.last_name|slice:":1"|upper }}
-              </button>
-              <div
-                id="userDropdown"
-                class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 hidden z-50"
-              >
-                <div class="px-4 py-2 text-gray-700">
-                  Welcome, {{ user.first_name|default:user.username }}
-                </div>
-                <form action="{% url "sign-out" %}" method="post">
-                    {% csrf_token %}
-                  <button type='submit'
-                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      >Logout</button>
-                </form>
+          <div class="relative hidden md:block">
+
+            <button
+              id="userMenuBtn"
+              onclick="toggleDropdown('userDropdown')"
+              class="w-10 h-10 bg-gradient-to-br from-indigo-600 to-indigo-700 text-white rounded-full flex items-center justify-center font-bold shadow-md focus:outline-none ring-1 ring-white/20 hover:ring-2 transition"
+            >
+              {{ user.first_name|slice:":1"|upper }}{{ user.last_name|slice:":1"|upper }}
+            </button>
+
+            <!-- Dropdown Menu -->
+            <div
+              id="userDropdown"
+              class="absolute right-0 mt-4 w-[275px] border border-indigo-300 bg-white rounded-xl shadow-2xl py-2 hidden z-50"
+            >
+              <div class="px-4 py-2 text-sm text-gray-600 border-b border-gray-200">
+                👋 Welcome,
+                <span class="font-medium text-gray-800">
+                  {{ user.first_name|default:user.username }}
+                </span>
               </div>
+              <form method="POST" action="{% url 'sign-out' %}">
+                {% csrf_token %}
+                <button
+                  type="submit"
+                  class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 hover:text-red-700 transition flex items-center gap-2"
+                >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M17 16l4-4m0 0l-4-4m4 4H7" />
+                  </svg>
+                  Logout
+                </button>
+              </form>
             </div>
-            {% endif %}
+        </div>
 
             <!-- Mobile menu button -->
             <div class="md:hidden">
@@ -103,6 +119,11 @@
             href="{% url 'group-list' %}"
             class="block text-gray-700 hover:text-indigo-600"
             >Groups</a>
+             <a
+                href="{% url 'rsvp_dashboard' %}"
+                class="block text-gray-700 hover:text-indigo-600"
+                >Participated Events</a
+              >
            
         
           {% if user.is_authenticated %}

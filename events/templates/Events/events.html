@@ -1,6 +1,22 @@
 {% extends "base.html" %}
 {% block title %}Events | E-Management{% endblock title %}
 {% block contents %}
+{% if messages %}
+  <div class="messages space-y-2 mb-4">
+    {% for message in messages %}
+      <div
+        class="p-3 rounded text-white
+        {% if message.tags == 'success' %}
+          bg-green-500
+        {% else %}
+          bg-red-500
+        {% endif %}
+        "
+      >
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
 <div class="container mx-auto px-4 py-8">
   <div class="">{% include "Events/events_filter.html" %}</div>
   {% if events %}

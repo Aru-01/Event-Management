@@ -5,9 +5,21 @@ from django.contrib import messages
 from django.db.models import Q, Count
 from django.utils.timezone import localtime
 from django.contrib.auth.models import User
+from user.views import is_Admin
+from django.contrib.auth.decorators import (
+    login_required,
+    permission_required,
+    user_passes_test,
+)
 
 
 # Create your views here.
+def is_Participant(user):
+    return user.groups.filter(name="Participant").exists()
+
+
+def is_Organizer(user):
+    return user.groups.filter(name="Organizer").exists()
 
 
 def events(request):
@@ -51,7 +63,9 @@ def events(request):
     return render(request, "Events/events.html", context)
 
 
-def dashboard(request):
+@login_required
+@user_passes_test(is_Organizer, login_url="no-permission")
+def organizer_dashboard(request):
     event_type = request.GET.get("type", "today")
 
     base_query = Event.objects.select_related("category").prefetch_related(
@@ -92,6 +106,8 @@ def dashboard(request):
     return render(request, "Dashboard/dashboard.html", context)
 
 
+@login_required
+@permission_required("events.add_event", login_url="no-permission")
 def create_event(request):
     form = EventModelForm()
 
@@ -111,6 +127,8 @@ def create_event(request):
     return render(request, "Create_event/create_event.html", context)
 
 
+@login_required
+@permission_required("events.add_category", login_url="no-permission")
 def add_category(request):
     if request.method == "POST":
         form = CategoryForm(request.POST)
@@ -126,18 +144,8 @@ def add_category(request):
     return render(request, "Dashboard/add_category/add_category.html", context)
 
 
-def delete_participant(request, id):
-    if request.method == "POST":
-        try:
-            participant = User.objects.get(id=id)
-            participant.delete()
-        except User.DoesNotExist:
-            print(f"User does not exist.")
-        return redirect("Total_Participants")
-    else:
-        return redirect("Total_Participants")
-
-
+@login_required
+@permission_required("events.view_participant", login_url="no-permission")
 def Total_Participants(request):
     pass
     participants = User.objects.filter(joined_events__isnull=False).distinct()
@@ -149,6 +157,8 @@ def Total_Participants(request):
     )
 
 
+@login_required
+@permission_required("events.view_category", login_url="no-permission")
 def Total_Categories(request):
     categories = Category.objects.all()
     return render(
@@ -158,6 +168,8 @@ def Total_Categories(request):
     )
 
 
+@login_required
+@permission_required("events.delete_category", login_url="no-permission")
 def delete_category(request, id):
     if request.method == "POST":
         # print("\n\n", id, "\n\n")
@@ -168,13 +180,21 @@ def delete_category(request, id):
         return redirect("Total_Categories")
 
 
+@login_required
+@permission_required("events.view_event", login_url="no-permission")
 def event_details(request, id):
-    event = Event.objects.get(id=id)
+    event = (
+        Event.objects.select_related("category")
+        .prefetch_related("participants")
+        .get(id=id)
+    )
     participants = event.participants.all()
     context = {"event": event, "participants": participants}
     return render(request, "shared/event_details.html", context)
 
 
+@login_required
+@permission_required("events.delete_event", login_url="no-permission")
 def delete_event(request, id):
     if request.method == "POST":
         # print("\n\n", id, "\n\n")
@@ -185,6 +205,8 @@ def delete_event(request, id):
         return redirect("events")
 
 
+@login_required
+@permission_required("events.change_event", login_url="no-permission")
 def update_event(request, id):
     event = Event.objects.get(id=id)
     form = EventModelForm(instance=event)
@@ -206,3 +228,43 @@ def update_event(request, id):
             return redirect("events")
     context = {"form": form}
     return render(request, "Create_event/create_event.html", context)
+
+
+@login_required
+@permission_required("events.view_event", login_url="no-permission")
+def rsvp_event(request, id):
+    if request.method == "POST":
+        event = Event.objects.get(id=id)
+        user = request.user
+        event.participants.add(user)
+        messages.success(request, f"You have successfully RSVPed to '{event.name}'!")
+
+        return redirect("event_details", id=id)
+
+
+@login_required
+@permission_required("events.view_event", login_url="no-permission")
+def rsvp_dashboard(request):
+    joined_events = (
+        request.user.joined_events.select_related("category").all().order_by("-date")
+    )
+    context = {
+        "joined_events": joined_events,
+    }
+    return render(request, "rsvp_dashboard/rsvp_dashboard.html", context)
+
+
+def no_permission(request):
+    return render(request, "permission/no_permission.html")
+
+
+@login_required
+def dashboard(request):
+    if is_Admin(request.user):
+        return redirect("admin-dashboard")
+    elif is_Organizer(request.user):
+        return redirect("organizer-dashboard")
+    elif is_Participant(request.user):
+        return redirect("rsvp_dashboard")
+    else:
+        return redirect("no-permissions")

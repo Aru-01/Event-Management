@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Home | E-Management{% endblock title %}
 {% block contents %}
+{% load static %}
 <section>
   <div class="">{% include 'Home/hero.html' %}</div>  
      <section class="bg-white border-y border-gray-200 py-16">
@@ -14,6 +15,8 @@
         <div class="bg-white shadow-md rounded-lg overflow-hidden">
           {% if event.img %}
           <img src="{{ event.img.url }}" alt="{{ event.name }}" class="w-full h-48 object-cover">
+          {% else %}
+          <img src="{% static "sample-images/no.png" %}" alt="{{ event.name }}" class="w-full h-48 object-cover">
           {% endif %}
           <div class="p-4">
             <h3 class="text-xl font-semibold mb-2">{{ event.name }}</h3>

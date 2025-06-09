@@ -15,6 +15,22 @@
         {% block contents %} 
         {% include "admin/Total_Participants/Total_Participants.html" %}
         {% comment %} contents {% endcomment %} 
+         {% if messages %}
+            <div class="messages space-y-2 mb-4">
+              {% for message in messages %}
+                <div
+                  class="p-3 rounded text-white
+                  {% if message.tags == 'success' %}
+                    bg-green-500
+                  {% else %}
+                    bg-red-500
+                  {% endif %}
+                  "
+                >
+                  {{ message }}
+                </div>
+            {% endfor %}
+            {% endif %}
         {% endblock contents %}
       </div>
     </main>

@@ -1,51 +1,80 @@
-{% extends "base.html" %}
-{% load static %}
-{% block title %}Event Detail | E-Management{% endblock title %}
+{% extends "base.html" %} 
+{% load static %} 
+{% block title %}Event Detail | E-Management{% endblock title %} 
 {% block contents %}
-<div
-  class="max-w-4xl my-12 mx-auto bg-white rounded-xl shadow-md overflow-hidden md:flex md:flex-col"
->
-  {% if event.img %}
-  <img
-    src="{{ event.img.url }}"
-    alt="{{ event.name }}"
-    class="w-full h-48 object-cover"
-  />
-  {% else %}
-  <img
-    src="{% static 'sample-images/no.png' %}"
-    alt="No image available"
-    class="w-full h-48 object-cover"
-  />
-  {% endif %}
-
-  <div class="p-6 space-y-4">
-    <h2 class="text-3xl font-bold text-gray-800">{{ event.name }}</h2>
-    <p class="text-gray-700">{{ event.description }}</p>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-600">
-      <p><strong>📍 Location:</strong> {{ event.location }}</p>
-      <p><strong>📅 Date:</strong> {{ event.date }}</p>
-      <p><strong> Participants:</strong> {{ event.participants.count }}</p>
-      <p><strong> Category:</strong> {{ event.category.name }}</p>
-    </div>
-
-    <div class="mt-6">
-      <h3 class="text-xl font-semibold text-gray-800 mb-2">Participants</h3>
-      {% if event.participants.all %}
-      <ul class="space-y-2">
-        {% for participant in event.participants.all %}
-        <li class="bg-gray-100 p-3 rounded-lg shadow-sm">
-          <p><strong>Name:</strong> {{ participant.name }}</p>
-          <p><strong>E-mail:</strong> {{ participant.email }}</p>
-        </li>
-        {% endfor %}
-      </ul>
+{% if messages %}
+<div class="mt-4 space-y-2">
+  {% for message in messages %}
+    <div 
+      class="px-4 py-3 rounded-md text-sm font-medium 
+      {% if message.tags == 'success' %}
+        bg-green-100 text-green-800 border border-green-300
       {% else %}
-      <p class="text-gray-500 italic">
-        No participants have joined this event yet.
-      </p>
+        bg-gray-100 text-gray-800 border border-gray-300
       {% endif %}
+      "
+    >
+      {{ message }}
+    </div>
+  {% endfor %}
+</div>
+{% endif %}
+<div class="max-w-4xl mx-auto my-12 bg-white rounded-xl shadow-md overflow-hidden md:flex md:flex-row">
+  <!-- Image section -->
+  <div class="md:w-1/2 h-48 md:h-auto">
+    {% if event.img %}
+    <img
+      src="{{ event.img.url }}"
+      alt="{{ event.name }}"
+      class="w-full h-full object-cover rounded-l-xl"
+    />
+    {% else %}
+    <img
+      src="{% static 'sample-images/no.png' %}"
+      alt="No image available"
+      class="w-full h-full object-cover rounded-l-xl"
+    />
+    {% endif %}
+  </div>
+
+  <!-- Details section -->
+  <div class="p-6 md:w-1/2 flex flex-col justify-between">
+    <div>
+      <h2 class="text-3xl font-bold text-gray-800 mb-4">{{ event.name }}</h2>
+      <p class="text-gray-700 mb-6">{{ event.description }}</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-600 mb-6">
+        <p><strong>📍 Location:</strong> {{ event.location }}</p>
+        <p><strong>📅 Date:</strong> {{ event.date }}</p>
+        <p><strong> Participants:</strong> {{ event.participants.count }}</p>
+        <p><strong> Category:</strong> {{ event.category.name }}</p>
+      </div>
+
+      <div>
+        <h3 class="text-xl font-semibold text-gray-800 mb-3">Participants</h3>
+        {% if event.participants.all %}
+        <ul class="space-y-3 max-h-48 overflow-y-auto">
+          {% for participant in event.participants.all %}
+          <li class="flex items-center space-x-3 bg-gray-100 p-3 rounded-lg shadow-sm">
+            <div
+              class="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold"
+              title="{{ participant.first_name }} {{ participant.last_name }}"
+            >
+              {{ participant.first_name|slice:":1"|upper }}{{ participant.last_name|slice:":1"|upper }}
+            </div>
+            <div>
+              <p class="font-medium text-gray-800">
+                {{ participant.first_name }} {{ participant.last_name }}
+              </p>
+              <p class="text-gray-500 text-sm">{{ participant.email }}</p>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p class="text-gray-500 italic">No participants have joined this event yet.</p>
+        {% endif %}
+      </div>
     </div>
 
     <div class="flex flex-wrap gap-4 mt-6">
@@ -68,7 +97,27 @@
           Delete Event
         </button>
       </form>
+
+      {% if user in event.participants.all %}
+      <button
+        disabled
+        class="bg-gray-400 cursor-not-allowed text-white px-4 py-2 rounded-lg"
+      >
+        Already RSVPed
+      </button>
+      {% else %}
+      <form method="POST" action="{% url "rsvp_event" event.id %}">
+        {% csrf_token %}
+        <button
+          type="submit"
+          class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition"
+        >
+          RSVP
+        </button>
+      </form>
+      {% endif %}
     </div>
   </div>
 </div>
+
 {% endblock contents %}

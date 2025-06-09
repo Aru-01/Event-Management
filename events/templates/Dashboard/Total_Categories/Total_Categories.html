@@ -1,5 +1,21 @@
 {% extends "base.html" %} {% block title %}Total Category {% endblock title %}
 {% block contents %}
+{% if messages %}
+  <div class="messages space-y-2 mb-4">
+    {% for message in messages %}
+      <div
+        class="p-3 rounded text-white
+        {% if message.tags == 'success' %}
+          bg-green-500
+        {% else %}
+          bg-red-500
+        {% endif %}
+        "
+      >
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
 <section
   class="bg-gradient-to-br from-indigo-100 via-white to-purple-100 min-h-screen"
 >

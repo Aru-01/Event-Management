@@ -23,7 +23,7 @@ class Event(models.Model):
     name = models.CharField(max_length=250)
     description = models.TextField()
     img = models.ImageField(
-        upload_to="event-img/", blank=True, null=True, default="sample-images/no.png"
+        upload_to="event-img/", blank=True, null=True, default="event-img/no.png"
     )
     date = models.DateField()
     time = models.TimeField()

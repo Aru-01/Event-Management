@@ -9,8 +9,13 @@ from django.db.models import Prefetch
 from events.models import Event, Category
 from django.db.models import Q, Count
 from django.utils.timezone import localtime
+from django.contrib.auth.decorators import login_required, user_passes_test
 
 # Create your views here.
+
+
+def is_Admin(user):
+    return user.groups.filter(name="Admin").exists()
 
 
 def sign_up(request):
@@ -55,12 +60,15 @@ def sign_in(request):
     return render(request, "sign-in/sign_in.html", {"form": form})
 
 
+@login_required
 def sign_out(request):
     if request.method == "POST":
         logout(request)
         return redirect("sign-in")
 
 
+@login_required
+@user_passes_test(is_Admin, login_url="no-permission")
 def admin_dashboard(request):
     users = User.objects.prefetch_related(
         Prefetch("groups", queryset=Group.objects.all(), to_attr="all_groups")
@@ -73,11 +81,15 @@ def admin_dashboard(request):
     return render(request, "admin/admin_dashboard.html", {"users": users})
 
 
+@login_required
+@user_passes_test(is_Admin, login_url="no-permission")
 def group_list(request):
     groups = Group.objects.prefetch_related("permissions").all()
     return render(request, "admin/Group-list/group_list.html", {"groups": groups})
 
 
+@login_required
+@user_passes_test(is_Admin, login_url="no-permission")
 def event_dashboard(request):
     event_type = request.GET.get("type", "today")
 
@@ -119,6 +131,8 @@ def event_dashboard(request):
     return render(request, "admin/event-Dashboard/event_dashboard.html", context)
 
 
+@login_required
+@user_passes_test(is_Admin, login_url="no-permission")
 def create_group(request):
     form = CreateGroupForm()
     if request.method == "POST":
@@ -130,6 +144,8 @@ def create_group(request):
     return render(request, "admin/create_group/create_group.html", {"form": form})
 
 
+@login_required
+@user_passes_test(is_Admin, login_url="no-permission")
 def change_role(request, user_id):
     user = User.objects.get(id=user_id)
     form = ChangeRoleForm()
@@ -149,6 +165,8 @@ def change_role(request, user_id):
     )
 
 
+@login_required
+@user_passes_test(is_Admin, login_url="no-permission")
 def delete_user(request, user_id):
     user = User.objects.get(id=user_id)
     if request.method == "POST":

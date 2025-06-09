@@ -1,0 +1,116 @@
+<nav class="bg-white shadow-md">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      <!-- Logo -->
+      <a href="/">
+        <div class="flex items-center space-x-2">
+          <div class="text-2xl font-bold text-indigo-600">E</div>
+          <span class="text-lg font-semibold text-gray-800">Management</span>
+        </div>
+      </a>
+
+      <!-- Desktop Menu -->
+      <div class="hidden md:flex items-center space-x-6">
+        <a href="{% url 'home' %}" class="text-gray-700 hover:text-indigo-600 font-medium">Home</a>
+        <a href="{% url 'events' %}" class="text-gray-700 hover:text-indigo-600 font-medium">Events</a>
+        <a href="{% url 'contact-us' %}" class="text-gray-700 hover:text-indigo-600 font-medium">Contact Us</a>
+        {% if user.groups.all.0.name == "Organizer" or user.groups.all.0.name == "Admin"  %} 
+        <a href="{% url 'rsvp_dashboard' %}" class="text-gray-700 hover:text-indigo-600 font-medium">Participated Events</a>
+          {% endif %}
+          <a href="{% url "dashboard" %}" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">Dashboard</a>
+
+          <div class="relative hidden md:block">
+            <button
+              id="userMenuBtn"
+              onclick="toggleDropdown('userDropdown')"
+              class="w-10 h-10 bg-gradient-to-br from-indigo-600 to-indigo-700 text-white rounded-full flex items-center justify-center font-bold shadow-md focus:outline-none ring-1 ring-white/20 hover:ring-2 transition"
+            >
+              {{ user.first_name|slice:":1"|upper }}{{ user.last_name|slice:":1"|upper }}
+            </button>
+
+            <!-- Dropdown Menu -->
+            <div
+              id="userDropdown"
+              class="absolute right-0 mt-4 w-[275px] border border-indigo-300 bg-white rounded-xl shadow-2xl py-2 hidden z-50"
+            >
+              <div class="px-4 py-2 text-sm text-gray-600 border-b border-gray-200">
+                👋 Welcome,
+                <span class="font-medium text-gray-800">
+                  {{ user.first_name|default:user.username }}
+                </span>
+              </div>
+              <form method="POST" action="{% url 'sign-out' %}">
+                {% csrf_token %}
+                <button
+                  type="submit"
+                  class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 hover:text-red-700 transition flex items-center gap-2"
+                >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M17 16l4-4m0 0l-4-4m4 4H7" />
+                  </svg>
+                  Logout
+                </button>
+              </form>
+            </div>
+          </div>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <div class="md:hidden">
+        <button id="menuBtn" class="text-gray-700 focus:outline-none">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Dropdown -->
+  <div id="mobileMenu" class="md:hidden hidden px-4 pt-2 pb-4 space-y-2">
+    <a href="{% url 'home' %}" class="block text-gray-700 hover:text-indigo-600">Home</a>
+    <a href="{% url 'events' %}" class="block text-gray-700 hover:text-indigo-600">Events</a>
+    <a href="{% url 'contact-us' %}" class="block text-gray-700 hover:text-indigo-600">Contact Us</a>
+     {% if user.groups.all.0.name == "Organizer" or user.groups.all.0.name == "Admin"  %} 
+        <a href="{% url 'rsvp_dashboard' %}" class="block text-gray-700 hover:text-indigo-600">Participated Events</a>
+          {% endif %}  
+    <a href="{% url 'dashboard' %}" class="block bg-indigo-600 text-white px-3 py-2 rounded hover:bg-indigo-700">Dashboard</a>
+      <div class="mt-2 border-t pt-2">
+        <div class="text-sm text-gray-600">
+          Welcome, {{ user.first_name|default:user.username }}
+        </div>
+        <form method="POST" action="{% url 'sign-out' %}">
+          {% csrf_token %}
+          <button
+            type="submit"
+            class="w-full flex items-center gap-2 px-4 py-2 bg-red-100 text-red-700 active:bg-red-200 rounded-md shadow-sm border border-red-300 transition duration-150"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M17 16l4-4m0 0l-4-4m4 4H7" />
+            </svg>
+            Logout
+          </button>
+        </form>
+      </div>
+    
+  </div>
+</nav>
+
+<script>
+  function toggleDropdown(id) {
+    const dropdown = document.getElementById(id);
+    dropdown.classList.toggle("hidden");
+  }
+
+  // Click outside to close
+  document.addEventListener("click", function (event) {
+    const dropdown = document.getElementById("userDropdown");
+    const button = document.getElementById("userMenuBtn");
+    if (!dropdown.contains(event.target) && !button.contains(event.target)) {
+      dropdown.classList.add("hidden");
+    }
+  });
+</script>
