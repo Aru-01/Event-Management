@@ -1,0 +1,65 @@
+{% extends "base.html" %} {% block contents %}
+<!-- templates/dashboard/rsvp_dashboard.html -->
+<div class="max-w-5xl mx-auto my-10 p-6 bg-white rounded-lg shadow-md">
+  <h1 class="text-3xl font-bold mb-6 text-indigo-700">
+    My Participated Events
+  </h1>
+
+  {% if joined_events %}
+  <div class="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+    {% for event in joined_events %}
+    <div
+      class="border rounded-lg shadow hover:shadow-lg transition p-4 flex flex-col"
+    >
+      {% if event.img %}
+      <img
+        src="{{ event.img.url }}"
+        alt="{{ event.name }}"
+        class="w-full h-40 object-cover rounded-md mb-4"
+      />
+      {% else %}
+      <div
+        class="w-full h-40 bg-gray-200 flex items-center justify-center rounded-md mb-4 text-gray-400"
+      >
+        No Image
+      </div>
+      {% endif %}
+
+      <h2 class="text-xl font-semibold text-gray-800 mb-2">{{ event.name }}</h2>
+
+      <p class="text-gray-600 flex-grow">
+        {{ event.description|truncatechars:100 }}
+      </p>
+
+      <div class="mt-4 text-sm text-gray-500 space-y-1">
+        <p>📅 <strong>Date:</strong> {{ event.date }}</p>
+        <p>📍 <strong>Location:</strong> {{ event.location }}</p>
+        <p>🗂️ <strong>Category:</strong> {{ event.category.name }}</p>
+      </div>
+
+      <a
+        href="{% url 'event_details' event.id %}"
+        class="mt-4 inline-block text-indigo-600 hover:text-indigo-800 font-semibold"
+      >
+        View Details &rarr;
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% else %}
+  <div class="text-center py-12">
+    <p class="text-xl text-gray-500 italic">
+      You haven't participated in any events yet.
+    </p>
+    <a
+      href="{% url 'events' %}"
+      class="inline-block mt-6 px-6 py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition"
+    >
+      Browse Events
+    </a>
+  </div>
+  {% endif %}
+</div>
+
+{% endblock contents %}

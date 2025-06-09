@@ -8,7 +8,11 @@
     <link href="{% static 'css/output.css' %}" rel="stylesheet" />
   </head>
   <body class="bg-gray-100">
-    <div class="">{% include "core_shared/nav.html" %}</div>
+    {% if user.is_authenticated %}
+      <div class="">{% include "core_shared/logged_nav.html" %}</div>
+    {% else %}
+      <div class="">{% include "core_shared/nav.html" %}</div>
+    {% endif %} 
     {% block contents %}{% endblock contents %}
     <div class="">{% include "core_shared/footer.html" %}</div>
 

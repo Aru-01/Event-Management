@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from events.models import Event, Category
 from events.forms import CategoryForm, EventModelForm
 from django.contrib import messages
@@ -169,7 +169,11 @@ def delete_category(request, id):
 
 
 def event_details(request, id):
-    event = Event.objects.get(id=id)
+    event = (
+        Event.objects.select_related("category")
+        .prefetch_related("participants")
+        .get(id=id)
+    )
     participants = event.participants.all()
     context = {"event": event, "participants": participants}
     return render(request, "shared/event_details.html", context)
@@ -206,3 +210,23 @@ def update_event(request, id):
             return redirect("events")
     context = {"form": form}
     return render(request, "Create_event/create_event.html", context)
+
+
+def rsvp_event(request, id):
+    if request.method == "POST":
+        event = Event.objects.get(id=id)
+        user = request.user
+        event.participants.add(user)
+        messages.success(request, f"You have successfully RSVPed to '{event.name}'!")
+
+        return redirect("event_details", id=id)
+
+
+def rsvp_dashboard(request):
+    joined_events = (
+        request.user.joined_events.select_related("category").all().order_by("-date")
+    )
+    context = {
+        "joined_events": joined_events,
+    }
+    return render(request, "rsvp_dashboard/rsvp_dashboard.html", context)

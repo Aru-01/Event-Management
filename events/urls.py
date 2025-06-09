@@ -11,11 +11,14 @@ from events.views import (
     event_details,
     delete_event,
     update_event,
+    rsvp_event,
+    rsvp_dashboard,
 )
 
 urlpatterns = [
     path("events/", events, name="events"),
     path("dashboard/", dashboard, name="dashboard"),
+    path("rsvp_dashboard/", rsvp_dashboard, name="rsvp_dashboard"),
     path("create-event/", create_event, name="create_event"),
     path("add-category/", add_category, name="add_category"),
     path(
@@ -32,5 +35,6 @@ urlpatterns = [
     ),
     path("event-details/<int:id>/", event_details, name="event_details"),
     path("event-details/delete/<int:id>/", delete_event, name="delete_event"),
+    path("event-details/rsvp/<int:id>/", rsvp_event, name="rsvp_event"),
     path("update-event/<int:id>/", update_event, name="update_event"),
 ]
