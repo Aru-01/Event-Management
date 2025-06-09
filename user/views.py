@@ -6,7 +6,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.tokens import default_token_generator
 from django.db.models import Prefetch
-from events.models import Event, Participant, Category
+from events.models import Event, Category
 from django.db.models import Q, Count
 from django.utils.timezone import localtime
 
@@ -103,7 +103,9 @@ def event_dashboard(request):
         today=Count("id", filter=Q(date=today)),
     )
 
-    total_participants = Participant.objects.count()
+    total_participants = (
+        User.objects.filter(joined_events__isnull=False).distinct().count()
+    )
     total_categories = Category.objects.count()
 
     context = {
@@ -153,6 +155,6 @@ def delete_user(request, user_id):
         user.delete()
         messages.success(request, "user remove successfully")
         return redirect("admin-dashboard")
-    
+
     messages.warning(request, "Invalid...")
     return redirect("admin-dashboard")

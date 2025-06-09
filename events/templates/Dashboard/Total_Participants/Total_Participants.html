@@ -15,29 +15,15 @@
           <th class="text-left px-4 py-2">SL</th>
           <th class="text-left px-4 py-2">Name</th>
           <th class="text-left px-4 py-2">Email</th>
-          <th class="text-left px-4 py-2">Action</th>
         </tr>
       </thead>
       <tbody>
         {% for participant in participants %}
         <tr class="border-t border-gray-200">
           <td class="px-4 py-2">{{ forloop.counter }}</td>
-          <td class="px-4 py-2">{{ participant.name }}</td>
+          <td class="px-4 py-2">{{ participant.first_name }} {{participant.last_name}} </td>
           <td class="px-4 py-2">{{ participant.email }}</td>
-          <td class="px-4 py-2">
-            <form
-              method="POST"
-              action="{% url 'delete_participant' participant.id %}"
-            >
-              {% csrf_token %}
-              <button
-                type="submit"
-                class="bg-red-500 hover:bg-red-600 text-white text-sm px-3 py-1 rounded"
-              >
-                Delete
-              </button>
-            </form>
-          </td>
+         
         </tr>
         {% empty %}
         <tr>

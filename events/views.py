@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect
-from events.models import Event, Category, Participant
-from events.forms import EventModelForm, CategoryForm, ParticipantForm
+from events.models import Event, Category
+from events.forms import CategoryForm, EventModelForm
 from django.contrib import messages
 from django.db.models import Q, Count
 from django.utils.timezone import localtime
-
+from django.contrib.auth.models import User
 
 
 # Create your views here.
+
 
 def events(request):
     search = request.GET.get("search", "")
@@ -75,7 +76,9 @@ def dashboard(request):
         today=Count("id", filter=Q(date=today)),
     )
 
-    total_participants = Participant.objects.count()
+    total_participants = (
+        User.objects.filter(joined_events__isnull=False).distinct().count()
+    )
     total_categories = Category.objects.count()
 
     context = {
@@ -123,34 +126,22 @@ def add_category(request):
     return render(request, "Dashboard/add_category/add_category.html", context)
 
 
-def add_participant(request):
-    form = ParticipantForm()
-    if request.method == "POST":
-        form = ParticipantForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Participant added successfully!")
-            return redirect("Total_Participants")
-        else:
-            messages.error(request, "Something Went wrong.")
-    else:
-        form = ParticipantForm()
-    context = {"participant_form": form}
-    return render(request, "Dashboard/add_participant/add_participant.html", context)
-
-
 def delete_participant(request, id):
     if request.method == "POST":
-        # print("\n\n", id, "\n\n")
-        participant = Participant.objects.get(id=id)
-        participant.delete()
+        try:
+            participant = User.objects.get(id=id)
+            participant.delete()
+        except User.DoesNotExist:
+            print(f"User does not exist.")
         return redirect("Total_Participants")
     else:
         return redirect("Total_Participants")
 
 
 def Total_Participants(request):
-    participants = Participant.objects.all()
+    pass
+    participants = User.objects.filter(joined_events__isnull=False).distinct()
+
     return render(
         request,
         "Dashboard/Total_Participants/Total_Participants.html",
