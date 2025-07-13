@@ -28,7 +28,7 @@ def sign_up(request):
             user = form.save(commit=False)
             user.set_password(form.cleaned_data.get("password1"))
             user.is_active = False
-            user.save()
+            user.save() 
             messages.success(
                 request, "A activation Mail Send your mail. Plase check..."
             )
