@@ -39,13 +39,6 @@ def send_activation_mail(sender, instance, created, **kwargs):
             print(f"Failed to send mail {instance.email}: {str(e)}")
 
 
-@receiver(post_save, sender=User)
-def Assign_role(sender, instance, created, **kwargs):
-    if created:
-        user_group, created = Group.objects.get_or_create(name="Participant")
-        instance.groups.add(user_group)
-        instance.save()
-
 
 @receiver(m2m_changed, sender=User.groups.through)
 def notify_user_role_change(sender, instance, action, **kwargs):
