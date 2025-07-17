@@ -28,7 +28,7 @@ def sign_up(request):
             user = form.save(commit=False)
             user.set_password(form.cleaned_data.get("password1"))
             user.is_active = False
-            user.save() 
+            user.save()
             messages.success(
                 request, "A activation Mail Send your mail. Plase check..."
             )
@@ -42,6 +42,9 @@ def activate_user(reqest, user_id, token):
         if default_token_generator.check_token(user, token):
             user.is_active = True
             user.save()
+            
+            user_group, created = Group.objects.get_or_create(name="Participant")
+            user.groups.add(user_group)
             return redirect("sign-in")
         else:
             return HttpResponse("Invalid id or token")
